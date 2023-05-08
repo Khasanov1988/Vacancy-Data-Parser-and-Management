@@ -79,7 +79,7 @@ class HeadHunterAPI(AbcApi):
         for item in self.__vacancies:
             corrected_vacancies.append({
                 "source": "HeadHunter",
-                "id": item["id"],
+                "id": int(item["id"]),
                 "title": item["name"],
                 "client": item["employer"]["name"],
                 "link": item["url"],
@@ -116,7 +116,6 @@ class SuperJobAPI(AbcApi):
                 break
             print(f"Найдено ({len(values)}) вакансий.")
             self.__vacancies.extend(values)
-            print(type(self.__vacancies))
             self.__params['page'] += 1
 
     def get_request(self):
