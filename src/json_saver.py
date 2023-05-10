@@ -15,7 +15,7 @@ class JsonAbs(ABC):
         pass
 
     @abstractmethod
-    def get_vacancies_by_salary(self):
+    def get_vacancies_by_salary(self, salary_min, salary_max):
         pass
 
     @abstractmethod
@@ -41,10 +41,16 @@ class JSONSaver(JsonAbs):
         with open('data.json', 'w', encoding='utf-8') as file:
             json.dump(self.data, file)
 
-    def get_vacancies_by_salary(self):
-        pass
+    def get_vacancies_by_salary(self, salary_min: int, salary_max: int):
+        answer = []
+        for vacancy in self.data:
+            if isinstance(vacancy["salary_from"], int) and salary_min <= vacancy["salary_from"] <= salary_max:
+                answer.append(vacancy)
+            elif isinstance(vacancy["salary_to"], int) and salary_min <= vacancy["salary_to"] <= salary_max:
+                answer.append(vacancy)
+        return answer
 
-    def delete_vacancy(self, vacancy_id):
+    def delete_vacancy(self, vacancy_id: int):
         file = open('data.json', 'r', encoding='utf-8')
         data = json.load(file)
         file.close()

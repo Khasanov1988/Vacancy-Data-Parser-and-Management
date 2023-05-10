@@ -5,6 +5,7 @@ class ComparisonError(Exception):
 
 class Vacancy:
     __slots__ = ['source', 'id', 'title', 'employer', 'link', 'area', 'salary_from', 'salary_to', 'salary_currency']
+    all_vacancies = []
 
     def __init__(self, enter_dict: dict):
         self.source = enter_dict['source']
@@ -16,6 +17,15 @@ class Vacancy:
         self.salary_from = enter_dict['salary_from']
         self.salary_to = enter_dict['salary_to']
         self.salary_currency = enter_dict['salary_currency']
+        self.all_vacancies.append(self)
+
+    def __str__(self):
+        return f"Вакансия из {self.source} c id: {self.id}"
+
+    def __repr__(self):
+        return f"Vacancy(source:{self.source}, id:{self.id}, title:{self.title}, employer:{self.employer}," \
+               f" link:{self.link}, area:{self.area}, salary_from:{self.salary_from}, salary_to:{self.salary_to}," \
+               f" salary_currency:{self.salary_currency}"
 
     def __lt__(self, other):
         if self.salary_from is None or other.__salary_from is None:

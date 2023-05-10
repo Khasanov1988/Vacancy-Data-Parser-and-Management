@@ -82,7 +82,7 @@ class HeadHunterAPI(AbcApi):
                 "id": int(item["id"]),
                 "title": item["name"],
                 "client": item["employer"]["name"],
-                "link": item["url"],
+                "link": item["alternate_url"],
                 "area": item["area"]["name"]
             })
             if item["salary"] is not None:
@@ -93,6 +93,10 @@ class HeadHunterAPI(AbcApi):
                 corrected_vacancies[-1]["salary_from"] = corrected_vacancies[-1]["salary_to"] = corrected_vacancies[-1][
                     "salary_currency"] = None
         return corrected_vacancies
+
+    @property
+    def vacancies(self):
+        return self.__vacancies
 
 
 class SuperJobAPI(AbcApi):
