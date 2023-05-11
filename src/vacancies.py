@@ -1,13 +1,18 @@
 class ComparisonError(Exception):
+    """Класс ошибки при сравнении вакансий"""
     def __str__(self):
         return "Ошибка в сравнении. В каком-то из вакансий может быть не указана зарплата"
 
 
 class Vacancy:
+    """
+    Класс вакансий
+    """
     __slots__ = ['source', 'id', 'title', 'employer', 'link', 'area', 'salary_from', 'salary_to', 'salary_currency']
     all_vacancies = []
 
     def __init__(self, enter_dict: dict):
+        """Инициализация класса"""
         self.source = enter_dict['source']
         self.id = enter_dict['id']
         self.title = enter_dict['title']
@@ -20,14 +25,17 @@ class Vacancy:
         self.all_vacancies.append(self)
 
     def __str__(self):
+        """Переопределение магического метода str"""
         return f"Вакансия из {self.source} c id: {self.id}"
 
     def __repr__(self):
+        """Переопределение магического метода repr"""
         return f"Vacancy(source:{self.source}, id:{self.id}, title:{self.title}, employer:{self.employer}," \
                f" link:{self.link}, area:{self.area}, salary_from:{self.salary_from}, salary_to:{self.salary_to}," \
                f" salary_currency:{self.salary_currency}"
 
     def __lt__(self, other):
+        """Переопределение магического метода lt"""
         if self.salary_from is None or other.__salary_from is None:
             raise ComparisonError
         else:
@@ -37,6 +45,7 @@ class Vacancy:
                 return False
 
     def __le__(self, other):
+        """Переопределение магического метода le"""
         if self.salary_from is None or other.__salary_from is None:
             raise ComparisonError
         else:
@@ -46,6 +55,7 @@ class Vacancy:
                 return False
 
     def __gt__(self, other):
+        """Переопределение магического метода gt"""
         if self.salary_from is None or other.__salary_from is None:
             raise ComparisonError
         else:
@@ -55,6 +65,7 @@ class Vacancy:
                 return False
 
     def __ge__(self, other):
+        """Переопределение магического метода ge"""
         if self.salary_from is None or other.__salary_from is None:
             raise ComparisonError
         else:

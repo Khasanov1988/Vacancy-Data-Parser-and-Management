@@ -5,6 +5,7 @@ from src.vacancies import Vacancy
 
 
 class VacancyError(Exception):
+    """"""
     def __str__(self):
         return 'Используемый объект не является экземпляром класса Vacancy'
 
@@ -12,18 +13,22 @@ class VacancyError(Exception):
 class JsonAbs(ABC):
     @abstractmethod
     def save_to_json(self):
+        """Сохранение в файл json"""
         pass
 
     @abstractmethod
     def get_vacancies_by_salary(self, salary_min, salary_max):
+        """Получает вакансии в коридоре значений зарплаты"""
         pass
 
     @abstractmethod
     def delete_vacancy(self, id):
+        """Удаляет вакансию из файла"""
         pass
 
     @abstractmethod
     def add_vacancy(self, vacancy):
+        """Добавляет вакансию"""
         pass
 
     @staticmethod

@@ -50,7 +50,7 @@ def filter_vacancies(vacancies: list, filter_words) -> list:
         for items in val:
             words = str(items).split()
             for item in words:
-                if item in filter_words.split():
+                if item.lower() in filter_words.split():
                     filtered_vacancies.append(vacancy)
                     flag = True
                     break
