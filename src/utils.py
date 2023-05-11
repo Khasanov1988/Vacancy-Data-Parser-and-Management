@@ -72,6 +72,8 @@ def get_vacancies_by_salary(self, salary_min: int, salary_max: int):
 
 
 def vacancies_parcer():
+    """Парсинг вакансий с ресурсов HeadHunter и SuperJob"""
+    # Работа источниками
     sources = None
     while sources not in ("1", "2", "3"):
         if sources in ("exit", "выход"):
@@ -89,8 +91,9 @@ def vacancies_parcer():
     else:
         hh = None
         sj = SuperJobAPI()
-
+    # Работа с ключевым словом
     keyword: str = input('Введите требуемое ключевое слово для поиска вакансий ---> ')
+    # Работа с количеством страниц парсинга
     page_count = None
     while page_count not in (range(1, 51)):
         if page_count in ("exit", "выход"):
@@ -101,7 +104,7 @@ def vacancies_parcer():
             "Введите требуемое количество страниц вывода от 1 до 50 (на каждой странице по 100 вакансий) ---> ")
         if page_count.isdecimal():
             page_count = int(page_count)
-
+    # Парсинг
     if hh is not None:
         hh.get_vacancies(keyword, int(page_count))
         vacancies_hh = hh.get_corrected_vacancies()
@@ -113,7 +116,7 @@ def vacancies_parcer():
         vacancies_sj = sj.get_corrected_vacancies()
     else:
         vacancies_sj = []
-
+    # Сохранение данных в файл
     data = JSONSaver(vacancies_hh + vacancies_sj)
     data.save_to_json()
     return data
