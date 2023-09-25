@@ -8,7 +8,7 @@ def main():
         'Do you need to read data from the "data.json" file?\n'
         '"Yes" - read data from the file\n'
         'any other input - parse data again\n')
-    if is_parser_needed in ("Yes", "Y"):
+    if is_parser_needed.lower() in ("yes", "y"):
         try:
             # Load data from the file
             file = open('data.json', 'r', encoding='utf-8')

@@ -28,7 +28,7 @@ To get started, follow these steps:
 1. Clone this repository to your local machine:
 
    ```bash
-   git clone https://github.com/your-username/vacancy-data-parser.git
+   git clone https://github.com/Khasanov1988/Vacancy-Data-Parser-and-Management.git
    ```
 
 2. Install the required Python packages:
