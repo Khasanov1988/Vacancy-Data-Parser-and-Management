@@ -5,35 +5,35 @@ from src.vacancies import Vacancy
 
 
 class VacancyError(Exception):
-    """"""
+    """Custom exception for handling invalid vacancy objects."""
     def __str__(self):
-        return 'Используемый объект не является экземпляром класса Vacancy'
+        return 'The object used is not an instance of the Vacancy class.'
 
 
 class JsonAbs(ABC):
     @abstractmethod
     def save_to_json(self):
-        """Сохранение в файл json"""
+        """Save data to a JSON file."""
         pass
 
     @abstractmethod
     def get_vacancies_by_salary(self, salary_min, salary_max):
-        """Получает вакансии в коридоре значений зарплаты"""
+        """Get vacancies within a salary range."""
         pass
 
     @abstractmethod
     def delete_vacancy(self, id):
-        """Удаляет вакансию из файла"""
+        """Delete a vacancy from the file."""
         pass
 
     @abstractmethod
     def add_vacancy(self, vacancy):
-        """Добавляет вакансию"""
+        """Add a vacancy."""
         pass
 
     @staticmethod
-    def printj(dict_to_print: dict) -> None:
-        """Выводит словарь в json-подобном удобном формате с отступами"""
+    def print_json(dict_to_print: dict) -> None:
+        """Print a dictionary in a JSON-like format with indentation."""
         print(json.dumps(dict_to_print, indent=2, ensure_ascii=False))
 
 
@@ -43,10 +43,12 @@ class JSONSaver(JsonAbs):
         self.data = data
 
     def save_to_json(self):
+        """Save data to a JSON file."""
         with open('data.json', 'w', encoding='utf-8') as file:
-            json.dump(self.data, file)
+            json.dump(self.data, file, ensure_ascii=False)
 
     def get_vacancies_by_salary(self, salary_min: int, salary_max: int):
+        """Get vacancies within a salary range."""
         answer = []
         for vacancy in self.data:
             if isinstance(vacancy["salary_from"], int) and salary_min <= vacancy["salary_from"] <= salary_max:
@@ -56,6 +58,7 @@ class JSONSaver(JsonAbs):
         return answer
 
     def delete_vacancy(self, vacancy_id: int):
+        """Delete a vacancy from the file."""
         file = open('data.json', 'r', encoding='utf-8')
         data = json.load(file)
         file.close()
@@ -64,7 +67,7 @@ class JSONSaver(JsonAbs):
             if data[i]["id"] == vacancy_id:
                 del_dict = data[i]
         if del_dict is None:
-            print("В списке вакансий нет вакансии с таким id")
+            print("There is no vacancy with such id in the list of vacancies.")
         else:
             data.remove(del_dict)
         self.data = data
@@ -73,6 +76,7 @@ class JSONSaver(JsonAbs):
         file.close()
 
     def add_vacancy(self, vacancy):
+        """Add a vacancy to the data list and the JSON file."""
         if isinstance(vacancy, Vacancy):
             entry = {
                 "source": vacancy.source,

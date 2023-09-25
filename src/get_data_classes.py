@@ -3,43 +3,36 @@ import requests
 from abc import ABC, abstractmethod
 import json
 
-
 class ParsingError(Exception):
     def __str__(self):
-        return 'Ошибка получения данных по API.'
-
+        return 'Error fetching data from the API.'
 
 class AbcApi(ABC):
-
     @abstractmethod
     def get_request(self):
         """
-        Класс для подключения к API сервиса
-        :return:
+        Abstract method for making API requests.
         """
         pass
 
     @abstractmethod
     def get_vacancies(self, keyword, page_count):
         """
-        Класс для получения информации по вакансиям
-        :return:
+        Abstract method for retrieving vacancy information.
         """
         pass
 
     @abstractmethod
     def get_corrected_vacancies(self):
         """
-        Класс для конвертирования информации в надлежащий вид
-        :return:
+        Abstract method for converting data into the desired format.
         """
         pass
 
     @staticmethod
-    def printj(dict_to_print: dict) -> None:
-        """Выводит словарь в json-подобном удобном формате с отступами"""
+    def print_json(dict_to_print: dict) -> None:
+        """Prints a dictionary in a JSON-like format with indentation."""
         print(json.dumps(dict_to_print, indent=2, ensure_ascii=False))
-
 
 class HeadHunterAPI(AbcApi):
     def __init__(self):
@@ -56,13 +49,13 @@ class HeadHunterAPI(AbcApi):
     def get_vacancies(self, keyword, page_count=1):
         self.__params["text"] = keyword
         while self.__params['page'] < page_count:
-            print(f"HeadHunter, Парсинг страницы {self.__params['page'] + 1}", end=": ")
+            print(f"HeadHunter, Parsing page {self.__params['page'] + 1}", end=": ")
             try:
                 values = self.get_request()
             except ParsingError:
-                print('Ошибка получения данных!')
+                print('Error fetching data!')
                 break
-            print(f"Найдено ({len(values)}) вакансий.")
+            print(f"Found ({len(values)}) vacancies.")
             self.__vacancies.extend(values)
             self.__params['page'] += 1
 
@@ -98,7 +91,6 @@ class HeadHunterAPI(AbcApi):
     def vacancies(self):
         return self.__vacancies
 
-
 class SuperJobAPI(AbcApi):
     def __init__(self):
         self.__header = {'X-Api-App-Id': os.getenv('SUPER_JOB_API_KEY')}
@@ -112,13 +104,13 @@ class SuperJobAPI(AbcApi):
     def get_vacancies(self, keyword, page_count=1):
         self.__params["keyword"] = keyword
         while self.__params['page'] < page_count:
-            print(f"SuperJob, Парсинг страницы {self.__params['page'] + 1}", end=": ")
+            print(f"SuperJob, Parsing page {self.__params['page'] + 1}", end=": ")
             try:
                 values = self.get_request()
             except ParsingError:
-                print('Ошибка получения данных!')
+                print('Error fetching data!')
                 break
-            print(f"Найдено ({len(values)}) вакансий.")
+            print(f"Found ({len(values)}) vacancies.")
             self.__vacancies.extend(values)
             self.__params['page'] += 1
 

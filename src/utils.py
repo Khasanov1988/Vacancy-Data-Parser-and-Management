@@ -1,15 +1,14 @@
-import json
 from get_data_classes import *
 from src.json_saver import JSONSaver
 
 
 def printj(dict_to_print: dict) -> None:
-    """Выводит словарь в json-подобном удобном формате с отступами"""
+    """Prints a dictionary in a JSON-like format with indentation"""
     print(json.dumps(dict_to_print, indent=2, ensure_ascii=False))
 
 
 def sort_vacancies_from(vacancies: list) -> list:
-    """Возвращает отсортированный список вакансий по убыванию минимальной зарплаты"""
+    """Returns a sorted list of vacancies in descending order of minimum salary"""
     for vacancy in vacancies:
         if vacancy['salary_from'] is None:
             vacancy['salary_from'] = 0
@@ -21,7 +20,7 @@ def sort_vacancies_from(vacancies: list) -> list:
 
 
 def sort_vacancies_to(vacancies: list) -> list:
-    """Возвращает отсортированный список вакансий по убыванию минимальной зарплаты"""
+    """Returns a sorted list of vacancies in descending order of maximum salary"""
     for vacancy in vacancies:
         if vacancy['salary_to'] is None:
             vacancy['salary_to'] = 0
@@ -33,7 +32,7 @@ def sort_vacancies_to(vacancies: list) -> list:
 
 
 def get_top_vacancies(vacancies: list, top_n) -> list:
-    """Возвращает N верхних значений списка вакансий"""
+    """Returns the top N values from the list of vacancies"""
     top_n = int(top_n)
     if len(vacancies) > top_n:
         return vacancies[0:top_n]
@@ -42,7 +41,7 @@ def get_top_vacancies(vacancies: list, top_n) -> list:
 
 
 def filter_vacancies(vacancies: list, filter_words) -> list:
-    """Возвращает отфильтрованные вакансии по ключевому слову"""
+    """Returns filtered vacancies based on a keyword"""
     filtered_vacancies = []
     for vacancy in vacancies:
         flag = False
@@ -56,12 +55,11 @@ def filter_vacancies(vacancies: list, filter_words) -> list:
                     break
             if flag:
                 break
-
     return filtered_vacancies
 
 
 def get_vacancies_by_salary(self, salary_min: int, salary_max: int):
-    """Возвращает вакансии в диапазоне зарплат"""
+    """Returns vacancies within a salary range"""
     answer = []
     for vacancy in self:
         if isinstance(vacancy["salary_from"], int) and salary_min <= vacancy["salary_from"] <= salary_max:
@@ -71,17 +69,17 @@ def get_vacancies_by_salary(self, salary_min: int, salary_max: int):
     return answer
 
 
-def vacancies_parcer():
-    """Парсинг вакансий с ресурсов HeadHunter и SuperJob"""
-    # Работа источниками
+def vacancies_parser():
+    """Parsing vacancies from HeadHunter and SuperJob resources"""
+    # Selecting data sources
     sources = None
     while sources not in ("1", "2", "3"):
         if sources in ("exit", "выход"):
             exit()
         elif sources is not None:
-            print('Вы ввели недопустимую команду. Попробуйте снова или введите "exit" для выхода')
+            print('You entered an invalid command. Please try again or enter "exit" to exit')
         sources = input(
-            "Введите требуемые источники вакансий: 1 - HeadHunter+SuperJob, 2 - HeadHunter, 3 - SuperJob ---> ").lower()
+            "Enter the desired sources of vacancies: 1 - HeadHunter+SuperJob, 2 - HeadHunter, 3 - SuperJob ---> ").lower()
     if sources == "1":
         hh = HeadHunterAPI()
         sj = SuperJobAPI()
@@ -91,20 +89,20 @@ def vacancies_parcer():
     else:
         hh = None
         sj = SuperJobAPI()
-    # Работа с ключевым словом
-    keyword: str = input('Введите требуемое ключевое слово для поиска вакансий ---> ')
-    # Работа с количеством страниц парсинга
+    # Working with keywords
+    keyword: str = input('Enter the desired keyword for vacancy search ---> ')
+    # Working with the number of parsing pages
     page_count = None
     while page_count not in (range(1, 51)):
         if page_count in ("exit", "выход"):
             exit()
         elif page_count is not None:
-            print('Вы ввели недопустимое значение количества страниц. Попробуйте снова или введите "exit" для выхода')
+            print('You entered an invalid number of pages. Please try again or enter "exit" to exit')
         page_count = input(
-            "Введите требуемое количество страниц вывода от 1 до 50 (на каждой странице по 100 вакансий) ---> ")
+            "Enter the desired number of output pages from 1 to 50 (each page contains 100 vacancies) ---> ")
         if page_count.isdecimal():
             page_count = int(page_count)
-    # Парсинг
+    # Parsing
     if hh is not None:
         hh.get_vacancies(keyword, int(page_count))
         vacancies_hh = hh.get_corrected_vacancies()
@@ -116,7 +114,7 @@ def vacancies_parcer():
         vacancies_sj = sj.get_corrected_vacancies()
     else:
         vacancies_sj = []
-    # Сохранение данных в файл
+    # Saving data to a file
     data = JSONSaver(vacancies_hh + vacancies_sj)
     data.save_to_json()
     return data
