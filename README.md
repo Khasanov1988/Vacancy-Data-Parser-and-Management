@@ -42,7 +42,7 @@ To get started, follow these steps:
 1. Run the `main.py` script:
 
    ```bash
-   python src/main.py
+   python main.py
    ```
 
 2. Follow the on-screen prompts to perform various operations on the vacancy data.
