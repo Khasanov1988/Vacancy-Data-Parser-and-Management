@@ -1,5 +1,5 @@
-from utils import *
-from json_saver import *
+from src.utils import *
+from src.json_saver import *
 
 
 def main():
@@ -14,12 +14,10 @@ def main():
             file = open('data.json', 'r', encoding='utf-8')
             vacancies_all = json.load(file)
             data = JSONSaver(vacancies_all)
+            file.close()
         except Exception:
             print("The file is not supported. Please try again.")
-            file.close()
             exit()
-        finally:
-            file.close()
     else:
         # Parse data from websites
         data = vacancies_parser()
@@ -57,18 +55,21 @@ def main():
             vacancies_all = filter_vacancies(vacancies_all, filter_words)
         elif command == "5":
             salaries = input('Enter the minimum and maximum salary values separated by a space ---> ').strip()
-            if salaries.split()[0].isdecimal():
-                salary_min = int(salaries.split()[0])
+            if len(salaries.split()) == 2:
+                if salaries.split()[0].isdecimal():
+                    salary_min = int(salaries.split()[0])
+                else:
+                    print('You entered an invalid value, please try the command again')
+                    salary_min = None
+                if salaries.split()[1].isdecimal():
+                    salary_max = int(salaries.split()[0])
+                else:
+                    print('You entered an invalid value, please try the command again')
+                    salary_max = None
+                if salary_max is not None and salary_min is not None:
+                    vacancies_all = get_vacancies_by_salary(vacancies_all, salary_min, salary_max)
             else:
-                print('You entered an invalid value, please try the command again')
-                salary_min = None
-            if salaries.split()[1].isdecimal():
-                salary_max = int(salaries.split()[0])
-            else:
-                print('You entered an invalid value, please try the command again')
-                salary_max = None
-            if salary_max is not None and salary_min is not None:
-                vacancies_all = get_vacancies_by_salary(vacancies_all, salary_min, salary_max)
+                print('Incorrect input')
         elif command == "6":
             vacancies_all = data.data
         elif command == "7":

@@ -160,3 +160,5 @@ cython_debug/
 .idea/
 
 2023-04-30.png
+
+data.json

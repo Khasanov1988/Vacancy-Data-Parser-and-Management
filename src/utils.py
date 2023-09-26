@@ -1,4 +1,4 @@
-from get_data_classes import *
+from src.get_data_classes import *
 from src.json_saver import JSONSaver
 
 
